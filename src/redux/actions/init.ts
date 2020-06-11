@@ -3,22 +3,37 @@ import { VIDEO_STREAM } from "../../constants";
 
 const createCanvases = (
   num: number,
-  scale: number,
   width: number,
   height: number,
   div: HTMLElement
 ): [HTMLCanvasElement, CanvasRenderingContext2D][] => {
   const canvases = [];
+
+  const angle = 360 / num;
+  const circleSize = 700;
+  const scale = num <= 4 ? 1 : 1 - num / 50;
+  console.log(scale);
+
+  let rot = 0;
   for (let i = 0; i < num; i++) {
-    const canvas = document.createElement("CANVAS") as HTMLCanvasElement;
+    let canvas = document.createElement("CANVAS") as HTMLCanvasElement;
     canvas.width = width * scale;
     canvas.height = height * scale;
+    canvas.id = `canvas-${i}`;
+    canvas.className = "float";
+    canvas.style.margin = `-${(width * scale) / 2}px`;
+    if (num > 4) {
+      // canvas.style.left = `${i * width * scale}px`;
+      canvas.style.transform = `rotate(${rot}deg) translate(${circleSize / 2}px)`;
+      rot = rot + angle;
+    } else {
+    }
     const context = canvas.getContext("2d");
     // context.scale(scale, scale);
     div.appendChild(canvas);
     canvases.push([canvas, context]);
   }
-  console.log(width, height);
+  // console.log(width, height);
   return canvases;
 };
 
@@ -44,20 +59,20 @@ export const init = () => async (dispatch: Dispatch): Promise<void> => {
   const div = document.getElementById("videos");
   const range = document.getElementById("num");
 
-  let scale = 0.3;
   let canvases = [];
   let numCanvases = 1;
-  canvases = createCanvases(numCanvases, scale, videoWidth, videoHeight, div);
+  canvases = createCanvases(numCanvases, videoWidth, videoHeight, div);
 
   range.addEventListener("change", (e: Event) => {
     while (div.firstChild) {
       div.removeChild(div.firstChild);
     }
     numCanvases = (e.target as HTMLInputElement).valueAsNumber;
-    canvases = createCanvases(numCanvases, scale, videoWidth, videoHeight, div);
+    canvases = createCanvases(numCanvases, videoWidth, videoHeight, div);
   });
 
   const render = () => {
+    const scale = numCanvases <= 4 ? 1 : 1 - numCanvases / 50;
     canvases.forEach(([, context]) => {
       context.drawImage(video, 0, 0, videoWidth * scale, videoHeight * scale);
     });
