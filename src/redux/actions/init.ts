@@ -26,7 +26,46 @@ const createCanvases = (
       // canvas.style.left = `${i * width * scale}px`;
       canvas.style.transform = `rotate(${rot}deg) translate(${circleSize / 2}px)`;
       rot = rot + angle;
-    } else {
+    } else if (num === 2) {
+      if (i === 0) {
+        const h = div.getBoundingClientRect().height;
+        canvas.style.transform = `translate(0px, ${h - height * 1.5}px)`;
+      } else {
+        canvas.style.transform = `rotate(180deg) translate(0px, ${height / 2}px)`;
+      }
+    } else if (num === 3) {
+      if (i === 0) {
+        const h = div.getBoundingClientRect().height;
+        canvas.style.transform = `translate(0px, ${h - height * 1.5}px)`;
+      } else if (i === 1) {
+        canvas.style.transform = `rotate(180deg) translate(0px, ${height / 2}px)`;
+      } else {
+        const w = div.getBoundingClientRect().width;
+        // canvas.style.transform = `rotate(90deg) translate(${-width}px, ${0}px)`;
+        canvas.style.transform = `rotate(90deg) translate(${0}px, ${w / 2}px)`;
+      }
+    } else if (num === 4) {
+      if (i === 0) {
+        const h = div.getBoundingClientRect().height;
+        console.log(h, window.innerHeight);
+        // canvas.style.transform = `translate(0px, ${h - height * 1.5}px)`;
+        // canvas.style.transform = `translate(0px, ${h / 2 - canvas.width / 2}px)`;
+        canvas.style.transform = `translate(0px, ${canvas.width / 2}px)`;
+      } else if (i === 1) {
+        const h = div.getBoundingClientRect().height;
+        // canvas.style.transform = `rotate(180deg) translate(0px, ${height / 2}px)`;
+        canvas.style.transform = `rotate(180deg) translate(0px, ${h / 2 - canvas.width / 2}px)`;
+      } else if (i === 2) {
+        const w = div.getBoundingClientRect().width;
+        // canvas.style.transform = `rotate(90deg) translate(${-width}px, ${0}px)`;
+        canvas.style.transform = `rotate(90deg) 
+        translate(${0}px, ${w / 2 - canvas.height / 2}px)`;
+      } else {
+        const w = div.getBoundingClientRect().width;
+        // canvas.style.transform = `rotate(90deg) translate(${-width}px, ${0}px)`;
+        canvas.style.transform = `rotate(-90deg) 
+        translate(${0}px, ${w / 2 - canvas.height / 2}px)`;
+      }
     }
     const context = canvas.getContext("2d");
     // context.scale(scale, scale);
@@ -60,7 +99,7 @@ export const init = () => async (dispatch: Dispatch): Promise<void> => {
   const range = document.getElementById("num");
 
   let canvases = [];
-  let numCanvases = 1;
+  let numCanvases = 4;
   canvases = createCanvases(numCanvases, videoWidth, videoHeight, div);
 
   range.addEventListener("change", (e: Event) => {
