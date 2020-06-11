@@ -4,13 +4,17 @@ import { Provider } from "react-redux";
 import "./styles/index.scss";
 import { store } from "./redux/store";
 import { RESIZE } from "./constants";
+import { init } from "./redux/actions/init";
 
 render(
   <Provider store={store}>
-    <div className="top">YOLO!</div>
+    <div id="videos"></div>
   </Provider>,
-  document.getElementById("app")
+  document.getElementById("app"),
+  () => {}
 );
+
+store.dispatch(init());
 
 window.addEventListener("resize", () => {
   store.dispatch({
