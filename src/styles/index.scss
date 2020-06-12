@@ -4,8 +4,9 @@ body {
   overflow: hidden;
 }
 
-#top {
-  // display: none;
+#control {
+  position: fixed;
+  top: calc(100vh + #{20px});
 }
 
 #videos {

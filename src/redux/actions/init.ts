@@ -11,8 +11,13 @@ const createCanvases = (
 
   const angle = 360 / num;
   const circleSize = 700;
-  const scale = num <= 4 ? 1 : 1 - num / 50;
-  console.log(scale);
+  let scale = 1;
+  if (num > 4) {
+    scale = 1 - num / 50;
+  } else if (num > 2) {
+    scale = 0.8;
+  }
+  console.log(num, scale);
 
   let rot = 0;
   for (let i = 0; i < num; i++) {
@@ -21,48 +26,25 @@ const createCanvases = (
     canvas.height = height * scale;
     canvas.id = `canvas-${i}`;
     canvas.className = "float";
-    canvas.style.margin = `-${(width * scale) / 2}px`;
+    canvas.style.margin = `-${canvas.height / 2}px -${canvas.width / 2}px`;
     if (num > 4) {
-      // canvas.style.left = `${i * width * scale}px`;
       canvas.style.transform = `rotate(${rot}deg) translate(${circleSize / 2}px)`;
       rot = rot + angle;
-    } else if (num === 2) {
-      if (i === 0) {
-        const h = div.getBoundingClientRect().height;
-        canvas.style.transform = `translate(0px, ${h - height * 1.5}px)`;
-      } else {
-        canvas.style.transform = `rotate(180deg) translate(0px, ${height / 2}px)`;
-      }
-    } else if (num === 3) {
-      if (i === 0) {
-        const h = div.getBoundingClientRect().height;
-        canvas.style.transform = `translate(0px, ${h - height * 1.5}px)`;
-      } else if (i === 1) {
-        canvas.style.transform = `rotate(180deg) translate(0px, ${height / 2}px)`;
-      } else {
-        const w = div.getBoundingClientRect().width;
-        // canvas.style.transform = `rotate(90deg) translate(${-width}px, ${0}px)`;
-        canvas.style.transform = `rotate(90deg) translate(${0}px, ${w / 2}px)`;
-      }
-    } else if (num === 4) {
-      if (i === 0) {
-        const h = div.getBoundingClientRect().height;
-        console.log(h, window.innerHeight);
-        // canvas.style.transform = `translate(0px, ${h - height * 1.5}px)`;
-        // canvas.style.transform = `translate(0px, ${h / 2 - canvas.width / 2}px)`;
-        canvas.style.transform = `translate(0px, ${canvas.width / 2}px)`;
+    } else {
+      const h = div.getBoundingClientRect().height;
+      const w = div.getBoundingClientRect().width;
+      const ch = canvas.height;
+      const cw = canvas.width;
+      if (i === 0 && num !== 1) {
+        canvas.style.transform = `translate(0px, ${h / 2 - ch / 2}px)`;
       } else if (i === 1) {
         const h = div.getBoundingClientRect().height;
-        // canvas.style.transform = `rotate(180deg) translate(0px, ${height / 2}px)`;
-        canvas.style.transform = `rotate(180deg) translate(0px, ${h / 2 - canvas.width / 2}px)`;
+        canvas.style.transform = `rotate(180deg) 
+        translate(0px, ${h / 2 - ch / 2}px)`;
       } else if (i === 2) {
-        const w = div.getBoundingClientRect().width;
-        // canvas.style.transform = `rotate(90deg) translate(${-width}px, ${0}px)`;
         canvas.style.transform = `rotate(90deg) 
         translate(${0}px, ${w / 2 - canvas.height / 2}px)`;
-      } else {
-        const w = div.getBoundingClientRect().width;
-        // canvas.style.transform = `rotate(90deg) translate(${-width}px, ${0}px)`;
+      } else if (i === 3) {
         canvas.style.transform = `rotate(-90deg) 
         translate(${0}px, ${w / 2 - canvas.height / 2}px)`;
       }
@@ -96,10 +78,11 @@ export const init = () => async (dispatch: Dispatch): Promise<void> => {
   });
 
   const div = document.getElementById("videos");
-  const range = document.getElementById("num");
+  const range = document.getElementById("num") as HTMLInputElement;
 
   let canvases = [];
-  let numCanvases = 4;
+  let numCanvases = 1;
+  range.valueAsNumber = numCanvases;
   canvases = createCanvases(numCanvases, videoWidth, videoHeight, div);
 
   range.addEventListener("change", (e: Event) => {
@@ -120,6 +103,12 @@ export const init = () => async (dispatch: Dispatch): Promise<void> => {
 
   video.play();
   render();
+  // setTimeout(() => {
+  //   range.focus();
+  // }, 100);
+  document.addEventListener("click", () => {
+    range.focus();
+  });
 
   dispatch({
     type: VIDEO_STREAM,
