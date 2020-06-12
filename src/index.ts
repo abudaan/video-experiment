@@ -58,9 +58,9 @@ const createCanvases = (
 
 const init = async (): Promise<void> => {
   const s = await navigator.mediaDevices.getUserMedia({
-    // video: { width: 1280 / 2, height: 720 / 2, frameRate: { ideal: 10, max: 15 } },
     video: true,
-    audio: true,
+    // video: { width: 1280 / 2, height: 720 / 2, frameRate: { ideal: 10, max: 15 } },
+    // audio: true,
   });
 
   let videoWidth = 0;
