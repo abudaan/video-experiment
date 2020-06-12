@@ -9,4 +9,4 @@ See the [live example](https://abudaan.github.io/video-experiment/dist).
 - click somewhere in the document
 - now you can adjust the number of canvases with your arrow keys
 
-I was inspired by this [sass plugin](https://css-tricks.com/snippets/sass/placing-items-circle/) that was in its turn inspired by an solution Ana Tudor came up with on [Stackoverflow](https://stackoverflow.com/questions/12813573/position-icons-into-circle)
+I was inspired by this [sass plugin](https://css-tricks.com/snippets/sass/placing-items-circle/) that was in its turn inspired by an solution [Ana Tudor](https://twitter.com/anatudor) came up with on [Stackoverflow](https://stackoverflow.com/questions/12813573/position-icons-into-circle). Check out Ana's [YouTube channel](https://www.youtube.com/user/anaix3l/videos) for amazing css experiments.
