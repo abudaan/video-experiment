@@ -1,5 +1,4 @@
-import { Dispatch } from "redux";
-import { VIDEO_STREAM } from "../../constants";
+import "./styles/index.scss";
 
 const createCanvases = (
   num: number,
@@ -8,7 +7,6 @@ const createCanvases = (
   div: HTMLElement
 ): [HTMLCanvasElement, CanvasRenderingContext2D][] => {
   const canvases = [];
-
   const angle = 360 / num;
   const circleSize = 700;
   let scale = 1;
@@ -17,11 +15,11 @@ const createCanvases = (
   } else if (num > 2) {
     scale = 0.8;
   }
-  console.log(num, scale);
+  // console.log(num, scale);
 
   let rot = 0;
   for (let i = 0; i < num; i++) {
-    let canvas = document.createElement("CANVAS") as HTMLCanvasElement;
+    const canvas = document.createElement("CANVAS") as HTMLCanvasElement;
     canvas.width = width * scale;
     canvas.height = height * scale;
     canvas.id = `canvas-${i}`;
@@ -34,7 +32,7 @@ const createCanvases = (
       const h = div.getBoundingClientRect().height;
       const w = div.getBoundingClientRect().width;
       const ch = canvas.height;
-      const cw = canvas.width;
+      // const cw = canvas.width;
       if (i === 0 && num !== 1) {
         canvas.style.transform = `translate(0px, ${h / 2 - ch / 2}px)`;
       } else if (i === 1) {
@@ -58,7 +56,7 @@ const createCanvases = (
   return canvases;
 };
 
-export const init = () => async (dispatch: Dispatch): Promise<void> => {
+const init = async (): Promise<void> => {
   const s = await navigator.mediaDevices.getUserMedia({
     // video: { width: 1280 / 2, height: 720 / 2, frameRate: { ideal: 10, max: 15 } },
     video: true,
@@ -77,7 +75,7 @@ export const init = () => async (dispatch: Dispatch): Promise<void> => {
     }
   });
 
-  const div = document.getElementById("videos");
+  const div = document.getElementById("app");
   const range = document.getElementById("num") as HTMLInputElement;
 
   let canvases = [];
@@ -93,7 +91,7 @@ export const init = () => async (dispatch: Dispatch): Promise<void> => {
     canvases = createCanvases(numCanvases, videoWidth, videoHeight, div);
   });
 
-  const render = () => {
+  const render = (): void => {
     const scale = numCanvases <= 4 ? 1 : 1 - numCanvases / 50;
     canvases.forEach(([, context]) => {
       context.drawImage(video, 0, 0, videoWidth * scale, videoHeight * scale);
@@ -103,17 +101,10 @@ export const init = () => async (dispatch: Dispatch): Promise<void> => {
 
   video.play();
   render();
-  // setTimeout(() => {
-  //   range.focus();
-  // }, 100);
+
   document.addEventListener("click", () => {
     range.focus();
   });
-
-  dispatch({
-    type: VIDEO_STREAM,
-    payload: {
-      stream: s,
-    },
-  });
 };
+
+document.addEventListener("DOMContentLoaded", init);
